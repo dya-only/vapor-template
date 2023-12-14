@@ -66,19 +66,22 @@ RUN export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true \
     && rm -r /var/lib/apt/lists/*
 
 # Create a vapor user and group with /app as its home directory
-RUN useradd --user-group --create-home --system --skel /dev/null --home-dir /app vapor
+# RUN useradd --user-group --create-home --system --skel /dev/null --home-dir /app vapor
 
 # Switch to the new home directory
 WORKDIR /app
 
 # Copy built executable and any staged resources from builder
-COPY --from=build --chown=vapor:vapor /staging /app
+COPY --from=build /staging /app
+
+# RUN mkdir Public/images
+# RUN mkdir Public/images/users
 
 # Provide configuration needed by the built-in crash reporter and some sensible default behaviors.
 ENV SWIFT_BACKTRACE=enable=yes,sanitize=yes,threads=all,images=all,interactive=no
 
 # Ensure all further commands run as the vapor user
-USER vapor:vapor
+# USER vapor:vapor
 
 # Let Docker bind to port 8080
 EXPOSE 8080

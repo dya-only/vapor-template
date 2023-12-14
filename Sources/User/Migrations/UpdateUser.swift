@@ -1,11 +1,12 @@
 import Fluent
 
-struct CreateUser: AsyncMigration {
+struct UpdateUser: AsyncMigration {
   func prepare(on database: Database) async throws {
     try await database.schema("users")
       .id()
       .field("email", .string, .required)
       .field("password", .string, .required)
+      .field("image", .string)
       .create()
   }
   
